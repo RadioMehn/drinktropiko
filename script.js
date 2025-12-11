@@ -177,12 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-   /* --- 6. CHECKOUT LOGIC (GOOGLE SHEETS INTEGRATION) --- */
+   /* --- 6. CHECKOUT LOGIC (WITH FILE UPLOAD) --- */
     const checkoutBtn = document.getElementById('checkout-btn');
     const modal = document.getElementById('checkout-modal');
     const cancelBtn = document.getElementById('cancel-btn');
     const orderForm = document.getElementById('order-form');
     const orderStatus = document.getElementById('order-status');
+    const modalTotal = document.getElementById('modal-total-price'); // New element
 
     // PASTE YOUR GOOGLE WEB APP URL HERE
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdIaXvqHEU8IR4436A88iIEWB2lyIVcmsQ_XssP105hP496Op2D9Ia-JEBqJN6ut0W/exec'; 
@@ -190,9 +191,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if(checkoutBtn) {
         checkoutBtn.addEventListener('click', () => {
             if(cart.length > 0) {
+                // Update the total price inside the modal
+                const currentTotal = document.getElementById('cart-total-price').innerText;
+                modalTotal.innerText = `Total to Pay: ${currentTotal}`;
+                
                 modal.classList.remove('hidden');
-                orderStatus.innerText = ""; // Clear status
-                orderForm.style.display = "block"; // Show form
+                orderStatus.innerText = "";
+                orderForm.style.display = "block";
             } else {
                 alert("Add some drinks first!");
             }
@@ -209,62 +214,74 @@ document.addEventListener('DOMContentLoaded', () => {
         orderForm.addEventListener('submit', e => {
             e.preventDefault();
             
-            // 1. Disable button and show loading state
             const submitBtn = orderForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerText;
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Processing...";
-            orderStatus.innerText = "Sending order to the island...";
-
-            // 2. Prepare Data
-            const customerName = document.getElementById('cust-name').value;
-            const customerPhone = document.getElementById('cust-phone').value;
-            const customerAddress = document.getElementById('cust-address').value;
+            const fileInput = document.getElementById('cust-proof');
             
-            // Format cart items into a single string
-            let orderDetails = cart.map(item => `${item.name} (${item.sizeLabel}) x${item.qty}`).join(", ");
-            let totalVal = document.getElementById('cart-total-price').innerText;
+            if (fileInput.files.length === 0) {
+                alert("Please upload your proof of payment!");
+                return;
+            }
 
-            let formData = {
-                name: customerName,
-                contact: customerPhone,
-                address: customerAddress,
-                items: orderDetails,
-                total: totalVal
-            };
+            const file = fileInput.files[0];
+            const reader = new FileReader();
 
-            // 3. Send to Google Sheets
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Important for Google Script
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                // 4. Success Handling
-                orderStatus.innerText = "Order Received! We'll contact you shortly.";
-                orderStatus.style.color = "green";
-                orderForm.reset();
-                orderForm.style.display = "none"; // Hide form
-                cart = []; // Clear Cart
-                updateCartDisplay();
+            // Start Loading
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Uploading...";
+            orderStatus.innerText = "Sending payment proof...";
+            
+            // Read the file content
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                const base64File = reader.result; // This is the image data
                 
-                // Close modal after 3 seconds
-                setTimeout(() => {
-                    modal.classList.add('hidden');
+                const customerName = document.getElementById('cust-name').value;
+                const customerPhone = document.getElementById('cust-phone').value;
+                const customerAddress = document.getElementById('cust-address').value;
+                
+                let orderDetails = cart.map(item => `${item.name} (${item.sizeLabel}) x${item.qty}`).join(", ");
+                let totalVal = document.getElementById('cart-total-price').innerText;
+
+                let formData = {
+                    name: customerName,
+                    contact: customerPhone,
+                    address: customerAddress,
+                    items: orderDetails,
+                    total: totalVal,
+                    file: base64File, // Sending the image data
+                    fileName: file.name,
+                    mimeType: file.type
+                };
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    orderStatus.innerText = "Order Received! We'll review your payment shortly.";
+                    orderStatus.style.color = "green";
+                    orderForm.reset();
+                    orderForm.style.display = "none";
+                    cart = []; 
+                    updateCartDisplay();
+                    
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                    }, 4000);
+                })
+                .catch(error => {
+                    orderStatus.innerText = "Error! Please try again.";
+                    orderStatus.style.color = "red";
                     submitBtn.disabled = false;
                     submitBtn.innerText = originalText;
-                }, 3000);
-            })
-            .catch(error => {
-                orderStatus.innerText = "Error! Please try again or message us directly.";
-                orderStatus.style.color = "red";
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalText;
-                console.error('Error!', error.message);
-            });
+                    console.error('Error:', error);
+                });
+            };
         });
     }
 

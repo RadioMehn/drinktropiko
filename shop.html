@@ -105,9 +105,15 @@
     </footer>
 
     <div id="checkout-modal" class="modal hidden">
-        <div class="modal-content glass-panel" style="text-align: left;">
-            <h2 style="text-align: center; margin-bottom: 20px;">Complete Your Order</h2>
+        <div class="modal-content glass-panel" style="text-align: left; max-height: 90vh; overflow-y: auto;">
+            <h2 style="text-align: center; margin-bottom: 10px;">Complete Your Order</h2>
             
+            <div style="background: #f0fff4; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; border: 1px solid #c6f6d5;">
+                <p style="font-weight: bold; color: var(--text-dark);">Scan to Pay</p>
+                <img src="images/qr-code.jfif" alt="Payment QR Code" style="width: 150px; height: 150px; margin: 10px auto; display: block;">
+                <p id="modal-total-price" style="font-size: 1.2rem; font-weight: 700; color: var(--primary-green);">Total: ₱0.00</p>
+            </div>
+
             <form id="order-form">
                 <div style="margin-bottom: 15px;">
                     <label style="display:block; font-size:0.9rem; margin-bottom:5px;">Full Name</label>
@@ -119,14 +125,19 @@
                     <input type="tel" id="cust-phone" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                 </div>
                 
-                <div style="margin-bottom: 20px;">
+                <div style="margin-bottom: 15px;">
                     <label style="display:block; font-size:0.9rem; margin-bottom:5px;">Delivery Address</label>
-                    <textarea id="cust-address" required rows="3" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+                    <textarea id="cust-address" required rows="2" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-size:0.9rem; margin-bottom:5px;">Upload Proof of Payment (Screenshot)</label>
+                    <input type="file" id="cust-proof" required accept="image/*" style="width:100%; padding:10px; background: white; border-radius:8px; border:1px solid #ddd;">
                 </div>
 
                 <div style="display: flex; gap: 10px; justify-content: center;">
                     <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Place Order</button>
+                    <button type="submit" class="btn btn-primary">Submit Order</button>
                 </div>
             </form>
             
