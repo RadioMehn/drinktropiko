@@ -177,23 +177,94 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* --- 6. CHECKOUT MODAL --- */
+   /* --- 6. CHECKOUT LOGIC (GOOGLE SHEETS INTEGRATION) --- */
     const checkoutBtn = document.getElementById('checkout-btn');
     const modal = document.getElementById('checkout-modal');
-    const closeModal = document.getElementById('close-modal');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const orderForm = document.getElementById('order-form');
+    const orderStatus = document.getElementById('order-status');
+
+    // PASTE YOUR GOOGLE WEB APP URL HERE
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdIaXvqHEU8IR4436A88iIEWB2lyIVcmsQ_XssP105hP496Op2D9Ia-JEBqJN6ut0W/exec'; 
 
     if(checkoutBtn) {
         checkoutBtn.addEventListener('click', () => {
-            if(cart.length > 0) modal.classList.remove('hidden');
-            else alert("Add some drinks first!");
+            if(cart.length > 0) {
+                modal.classList.remove('hidden');
+                orderStatus.innerText = ""; // Clear status
+                orderForm.style.display = "block"; // Show form
+            } else {
+                alert("Add some drinks first!");
+            }
         });
     }
 
-    if(closeModal) {
-        closeModal.addEventListener('click', () => {
+    if(cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
             modal.classList.add('hidden');
-            cart = []; 
-            if(shopContainer) updateCartDisplay();
+        });
+    }
+
+    if(orderForm) {
+        orderForm.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            // 1. Disable button and show loading state
+            const submitBtn = orderForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerText;
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Processing...";
+            orderStatus.innerText = "Sending order to the island...";
+
+            // 2. Prepare Data
+            const customerName = document.getElementById('cust-name').value;
+            const customerPhone = document.getElementById('cust-phone').value;
+            const customerAddress = document.getElementById('cust-address').value;
+            
+            // Format cart items into a single string
+            let orderDetails = cart.map(item => `${item.name} (${item.sizeLabel}) x${item.qty}`).join(", ");
+            let totalVal = document.getElementById('cart-total-price').innerText;
+
+            let formData = {
+                name: customerName,
+                contact: customerPhone,
+                address: customerAddress,
+                items: orderDetails,
+                total: totalVal
+            };
+
+            // 3. Send to Google Sheets
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Important for Google Script
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                // 4. Success Handling
+                orderStatus.innerText = "Order Received! We'll contact you shortly.";
+                orderStatus.style.color = "green";
+                orderForm.reset();
+                orderForm.style.display = "none"; // Hide form
+                cart = []; // Clear Cart
+                updateCartDisplay();
+                
+                // Close modal after 3 seconds
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalText;
+                }, 3000);
+            })
+            .catch(error => {
+                orderStatus.innerText = "Error! Please try again or message us directly.";
+                orderStatus.style.color = "red";
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+                console.error('Error!', error.message);
+            });
         });
     }
 

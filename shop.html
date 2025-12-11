@@ -105,10 +105,32 @@
     </footer>
 
     <div id="checkout-modal" class="modal hidden">
-        <div class="modal-content glass-panel">
-            <h2>Order Received!</h2>
-            <p>We're packing your Tropiko order now.</p>
-            <button id="close-modal" class="btn btn-primary">Back to Paradise</button>
+        <div class="modal-content glass-panel" style="text-align: left;">
+            <h2 style="text-align: center; margin-bottom: 20px;">Complete Your Order</h2>
+            
+            <form id="order-form">
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; font-size:0.9rem; margin-bottom:5px;">Full Name</label>
+                    <input type="text" id="cust-name" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; font-size:0.9rem; margin-bottom:5px;">Phone Number</label>
+                    <input type="tel" id="cust-phone" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-size:0.9rem; margin-bottom:5px;">Delivery Address</label>
+                    <textarea id="cust-address" required rows="3" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Place Order</button>
+                </div>
+            </form>
+            
+            <p id="order-status" style="text-align:center; margin-top:15px; font-weight:bold;"></p>
         </div>
     </div>
 
