@@ -167,38 +167,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // B. The Updated Display Function
+    // B. The Updated Display Function (With Mobile Support)
     function updateCartDisplay() {
         cartItemsContainer.innerHTML = '';
         let total = 0;
+        let totalItems = 0;
 
+        // 1. Render the Desktop Sidebar Cart
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = '<p class="empty-msg">Your cart is thirsty.</p>';
         } else {
             cart.forEach(item => {
                 total += item.price * item.qty;
+                totalItems += item.qty; // Count items
+                
                 const div = document.createElement('div');
                 div.classList.add('cart-item');
-                
                 div.innerHTML = `
                     <div style="flex: 1; padding-right: 10px;">
                         <div style="font-weight: 500; font-size: 0.95rem;">${item.name}</div>
                         <div style="font-size: 0.8rem; color: #666;">${item.sizeLabel}</div>
                         <div style="font-weight: 700; font-size: 0.9rem; margin-top: 2px;">₱${(item.price * item.qty).toLocaleString()}</div>
                     </div>
-                    
                     <div class="qty-controls">
                         <button class="qty-btn" onclick="updateItemQty('${item.cartId}', -1)">−</button>
-                        
                         <span style="font-size: 0.9rem; min-width: 15px; text-align: center;">${item.qty}</span>
-                        
                         <button class="qty-btn" onclick="updateItemQty('${item.cartId}', 1)">+</button>
                     </div>
                 `;
                 cartItemsContainer.appendChild(div);
             });
         }
+        
+        // Update Desktop Total
         cartTotalEl.innerText = `₱${total.toLocaleString()}`;
+
+        // 2. Update Mobile Sticky Bar
+        const mobileBar = document.getElementById('mobile-cart-bar');
+        const mobileCount = document.getElementById('mobile-cart-count');
+        const mobileTotal = document.getElementById('mobile-cart-total');
+        
+        if (mobileBar) {
+            if (cart.length > 0) {
+                mobileBar.classList.remove('hidden'); // Show bar
+                mobileCount.innerText = `${totalItems} items`;
+                mobileTotal.innerText = `₱${total.toLocaleString()}`;
+            } else {
+                mobileBar.classList.add('hidden'); // Hide if empty
+            }
+        }
+    }
+
+    // 3. Connect the Mobile Checkout Button
+    const mobileCheckoutBtn = document.getElementById('mobile-checkout-btn');
+    if(mobileCheckoutBtn) {
+        mobileCheckoutBtn.addEventListener('click', () => {
+             // Re-use the existing checkout logic
+             if(checkoutBtn) checkoutBtn.click();
+        });
     }
 
    /* --- 6. CHECKOUT LOGIC (WITH FILE UPLOAD) --- */

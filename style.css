@@ -295,3 +295,129 @@ footer { background: var(--text-dark); color: white; padding: 40px 20px; text-al
     from { opacity: 0; transform: translateX(50px); }
     to { opacity: 1; transform: translateX(0); }
 }
+
+/* --- CART QUANTITY CONTROLS --- */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Aligns buttons with text */
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f9f9f9;
+    padding: 2px 6px;
+    border-radius: 20px;
+}
+
+.qty-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: white;
+    color: var(--text-dark);
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0; /* fixes alignment */
+}
+
+.qty-btn:hover {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+}
+
+/* --- MOBILE SHOP OPTIMIZATIONS --- */
+
+/* 1. Mobile Sticky Bar Styles */
+.mobile-sticky-bar {
+    display: none; /* Hidden by default on desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 15px 20px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+    z-index: 990;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    animation: slideUp 0.3s ease-out;
+}
+
+.mobile-cart-info {
+    display: flex;
+    flex-direction: column;
+}
+
+#mobile-cart-count { font-size: 0.8rem; color: #666; }
+#mobile-cart-total { font-size: 1.2rem; font-weight: 700; color: var(--primary-green); }
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* 2. Mobile-Specific Adjustments */
+@media (max-width: 768px) {
+    /* Show the sticky bar on mobile */
+    .mobile-sticky-bar { display: flex; }
+
+    /* Stack the shop items vertically for better visibility */
+    .shop-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 20px;
+    }
+
+    .shop-thumb {
+        width: 120px; /* Larger image */
+        height: auto;
+        margin: 0 0 20px 0; /* Move margin to bottom */
+    }
+
+    .shop-details {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    /* Make the Add to Cart button full width */
+    .shop-actions {
+        width: 100%;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .shop-actions button {
+        width: 100%; /* Full width button is easier to tap */
+        padding: 14px; /* Taller touch target */
+    }
+
+    /* Fix iOS Input Zooming */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+
+    /* Modal adjustments for small screens */
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+        max-height: 85vh;
+        margin: 10px;
+    }
+    
+    /* Ensure the sticky bar doesn't cover the footer content */
+    footer { padding-bottom: 100px; }
+}
