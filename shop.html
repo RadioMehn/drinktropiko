@@ -1,116 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop | Tropiko</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <div id="age-gate" class="age-gate-overlay">
-        <div class="age-gate-content glass-panel">
-            <h1>TROPIKO</h1>
-            <p>Welcome to the island state of mind.</p>
-            <h2>Are you 18 years of age or older?</h2>
-            <div class="gate-buttons">
-                <button id="btn-yes" class="btn btn-primary">Yes, I am 18+</button>
-                <button id="btn-no" class="btn btn-secondary">No, I am under 18</button>
-            </div>
-            <p id="underage-msg" class="hidden">Sorry, you must be of legal drinking age to enter.</p>
-        </div>
-    </div>
-
-    <header id="main-header">
-        <div class="logo">
-            <a href="index.html">
-                <img src="images/logo.png" alt="Tropiko Logo">
-            </a>
-        </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="lambanog.html">Lambanog 101</a></li>
-                <li><a href="index.html#catalogue">Catalogue</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="shop.html" class="nav-cta">Shop</a></li>
-            </ul>
-
-            <div class="burger">
-                <div class="line1"></div>
-                <div class="line2"></div>
-                <div class="line3"></div>
-            </div>
-        </nav>
-    </header>
-
-    <main class="page-wrapper">
-        <section id="shop" class="section-padding">
-            <div class="section-header animate-on-scroll">
-                <h1>Order Online</h1>
-                <p>Get Tropiko delivered to your door.</p>
-            </div>
-            
-            <div class="shop-layout">
-                <div class="product-list" id="shop-container">
-                    </div>
-
-                <div class="cart-sidebar glass-panel sticky-cart animate-on-scroll">
-                    <h3>Your Cart</h3>
-                    <div id="cart-items">
-                        <p class="empty-msg">Your cart is thirsty.</p>
-                    </div>
-                    <div class="cart-total">
-                        <span>Total:</span>
-                        <span id="cart-total-price">₱0.00</span>
-                    </div>
-                    <button id="checkout-btn" class="btn btn-primary full-width">Checkout</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="section-padding" style="background-color: #f9fdfb;">
-            <div class="section-header animate-on-scroll">
-                <h2>Contact Details</h2>
-                <p>Reach out to the team.</p>
-            </div>
-            <div class="contact-box animate-on-scroll delay-100">
-                <div class="contact-item">
-                    <h3>Business Inquiries</h3>
-                    <a href="mailto:tropiko.ph.business@gmail.com">tropiko.ph.business@gmail.com</a>
-                </div>
-                <div class="contact-item">
-                    <h3>Phone Number</h3>
-                    <a href="tel:+6309953718983">+63 09953718983</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="brand">TROPIKO © 2025</div>
-            <div class="links">
-                <a href="https://www.instagram.com/drinktropiko/" target="_blank" rel="noopener noreferrer">Instagram</a>
-                <a href="https://www.tiktok.com/@drinktropiko" target="_blank" rel="noopener noreferrer">TikTok</a>
-            </div>
-        </div>
-        <p class="disclaimer">Please Drink Responsibly.</p>
-    </footer>
-
-    <div id="checkout-modal" class="modal hidden">
+<div id="checkout-modal" class="modal hidden">
         <div class="modal-content glass-panel" style="text-align: left; max-height: 90vh; overflow-y: auto;">
             <h2 style="text-align: center; margin-bottom: 10px;">Complete Your Order</h2>
             
             <div style="background: #f0fff4; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; border: 1px solid #c6f6d5;">
-                <p style="font-weight: bold; color: var(--text-dark);">Scan to Pay</p>
-                <img src="images/qr-code.jfif" alt="Payment QR Code" style="width: 150px; height: 150px; margin: 10px auto; display: block;">
+                <p style="font-weight: bold; color: var(--text-dark); margin-bottom: 10px;">Scan to Pay</p>
+                
+                <img src="images/qr-code.jfif" alt="Payment QR Code" style="width: 100%; max-width: 400px; height: auto; margin: 0 auto 10px; display: block; border-radius: 8px;">
+                
                 <p id="modal-total-price" style="font-size: 1.2rem; font-weight: 700; color: var(--primary-green);">Total: ₱0.00</p>
             </div>
 
@@ -144,7 +40,3 @@
             <p id="order-status" style="text-align:center; margin-top:15px; font-weight:bold;"></p>
         </div>
     </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
