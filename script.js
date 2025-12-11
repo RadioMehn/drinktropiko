@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTotal = document.getElementById('modal-total-price'); // New element
 
     // PASTE YOUR GOOGLE WEB APP URL HERE
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdIaXvqHEU8IR4436A88iIEWB2lyIVcmsQ_XssP105hP496Op2D9Ia-JEBqJN6ut0W/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3Oks0QWn__u9QuyM5kzmc4SlzHZJ4w64GSV-lzJmPr4Ozbrtd7oWmQBOimxL0JsiM/exec'; 
 
     if(checkoutBtn) {
         checkoutBtn.addEventListener('click', () => {
