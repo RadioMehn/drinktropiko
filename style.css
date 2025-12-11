@@ -216,14 +216,82 @@ footer { background: var(--text-dark); color: white; padding: 40px 20px; text-al
 .footer-content a { color: white; margin-left: 20px; text-decoration: none; opacity: 0.8; }
 .disclaimer { font-size: 0.8rem; opacity: 0.5; }
 
+/* --- RESPONSIVE MOBILE MENU --- */
+
+/* 1. Burger Icon (Hidden on Desktop) */
+.burger {
+    display: none;
+    cursor: pointer;
+}
+.burger div {
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-dark);
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+/* 2. Mobile Styles */
 @media (max-width: 768px) {
+    /* Layout Adjustments */
     .hero-container { flex-direction: column; text-align: center; justify-content: center; }
     .hero-text { padding-right: 0; margin-bottom: 40px; }
     .hero-text h1 { font-size: 2.5rem; }
     .shop-layout { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
     .hero-products { flex-direction: row; gap: 10px; }
     .hero-img { max-height: 250px; }
     .page-wrapper { padding-top: 100px; }
     .contact-box { flex-direction: column; }
+    
+    /* Show Burger Icon */
+    .burger { display: block; z-index: 1001; }
+
+    /* The Popup Tab (Hidden by default) */
+    .nav-links {
+        position: fixed;
+        right: 0px;
+        top: 0px;
+        height: 100vh;
+        width: 60%; /* Width of the popup tab */
+        background: rgba(255, 255, 255, 0.95); /* High opacity glass */
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Center links vertically */
+        gap: 40px; /* Space between links */
+        transform: translateX(100%); /* Push it off-screen to the right */
+        transition: transform 0.5s ease-in-out;
+        z-index: 1000;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    }
+
+    /* Links inside mobile menu */
+    .nav-links li { opacity: 0; } /* Hide initially for animation */
+    
+    /* The CTA button on mobile */
+    .nav-cta { 
+        background: var(--primary-green); 
+        color: var(--text-dark) !important;
+        width: 80%;
+        text-align: center;
+        display: block;
+    }
+
+    /* Class added by JS to show menu */
+    .nav-active {
+        transform: translateX(0%);
+    }
+
+    /* Burger Animation (Turn into X) */
+    .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); }
+    .toggle .line2 { opacity: 0; }
+    .toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); }
+}
+
+/* Keyframe for link fading */
+@keyframes navLinkFade {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
 }
