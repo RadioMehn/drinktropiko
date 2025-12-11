@@ -421,3 +421,46 @@ footer { background: var(--text-dark); color: white; padding: 40px 20px; text-al
     /* Ensure the sticky bar doesn't cover the footer content */
     footer { padding-bottom: 100px; }
 }
+
+/* --- BENEFITS SECTION --- */
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    max-width: 1000px;
+    margin: 40px auto 0;
+    text-align: center;
+}
+
+.benefit-item {
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.benefit-item:hover {
+    transform: translateY(-5px);
+}
+
+.benefit-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: #f0fff4;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px auto; /* Centers the icon */
+    box-shadow: 0 5px 15px rgba(168, 230, 207, 0.3);
+}
+
+.benefit-item h3 {
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+}
+
+.benefit-item p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
