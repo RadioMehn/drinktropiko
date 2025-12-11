@@ -151,30 +151,54 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCartDisplay();
         }
 
-        // Update Cart UI
-        function updateCartDisplay() {
-            cartItemsContainer.innerHTML = '';
-            let total = 0;
-
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<p class="empty-msg">Your cart is thirsty.</p>';
-            } else {
-                cart.forEach(item => {
-                    total += item.price * item.qty;
-                    const div = document.createElement('div');
-                    div.classList.add('cart-item');
-                    div.innerHTML = `
-                        <div style="display:flex; flex-direction:column;">
-                            <span>${item.name} (${item.sizeLabel})</span>
-                            <span style="font-size:0.8em; color:#888;">x${item.qty}</span>
-                        </div>
-                        <span>₱${(item.price * item.qty).toLocaleString()}</span>
-                    `;
-                    cartItemsContainer.appendChild(div);
-                });
+        // A. The New Logic to Change Quantity
+    window.updateItemQty = function(cartId, change) {
+        const itemIndex = cart.findIndex(item => item.cartId === cartId);
+        
+        if (itemIndex > -1) {
+            cart[itemIndex].qty += change;
+            
+            // If quantity drops to 0 or less, remove the item
+            if (cart[itemIndex].qty <= 0) {
+                cart.splice(itemIndex, 1);
             }
-            cartTotalEl.innerText = `₱${total.toLocaleString()}`;
+            
+            updateCartDisplay(); // Refresh the visual list
         }
+    };
+
+    // B. The Updated Display Function
+    function updateCartDisplay() {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<p class="empty-msg">Your cart is thirsty.</p>';
+        } else {
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                const div = document.createElement('div');
+                div.classList.add('cart-item');
+                
+                div.innerHTML = `
+                    <div style="flex: 1; padding-right: 10px;">
+                        <div style="font-weight: 500; font-size: 0.95rem;">${item.name}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${item.sizeLabel}</div>
+                        <div style="font-weight: 700; font-size: 0.9rem; margin-top: 2px;">₱${(item.price * item.qty).toLocaleString()}</div>
+                    </div>
+                    
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateItemQty('${item.cartId}', -1)">−</button>
+                        
+                        <span style="font-size: 0.9rem; min-width: 15px; text-align: center;">${item.qty}</span>
+                        
+                        <button class="qty-btn" onclick="updateItemQty('${item.cartId}', 1)">+</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(div);
+            });
+        }
+        cartTotalEl.innerText = `₱${total.toLocaleString()}`;
     }
 
    /* --- 6. CHECKOUT LOGIC (WITH FILE UPLOAD) --- */
@@ -284,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
     }
-
+}
     /* --- 7. MOBILE NAVIGATION LOGIC --- */
     const burger = document.querySelector('.burger');
     const nav = document.querySelector('.nav-links');
